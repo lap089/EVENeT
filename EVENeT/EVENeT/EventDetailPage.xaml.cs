@@ -23,6 +23,8 @@ using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI;
 using Windows.UI.Popups;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace EVENeT
@@ -35,7 +37,7 @@ namespace EVENeT
         public int CurrentEvent;
         private string organizer;
         private getEventFromIDResult _Event;
-
+        public ObservableCollection<BitmapImage> fileImages = new ObservableCollection<BitmapImage>();
         public EventDetailPage()
         {
             this.InitializeComponent();
@@ -62,7 +64,7 @@ namespace EVENeT
                 StorageFile file = await StorageFile.GetFileFromPathAsync(_Event.thumbnail);
                 BitmapImage bmp = new BitmapImage();
                 await bmp.SetSourceAsync(await file.OpenReadAsync());
-                EventThumbnail.Source = bmp;
+            //    EventThumbnail.Source = bmp;
             }
 
             // Set descripiton
@@ -78,6 +80,10 @@ namespace EVENeT
                 ticketRegister.IsEnabled = false;
             }
 
+            // Convert from paths to bitmaps 
+            await ConvertToBitmap();
+            FlipviewEvent.ItemsSource = fileImages;
+
             // Set location
             var location = await Client.GetLocationFromIdAsync(_Event.location);
             EventLocation.CardTitle = location.address;
@@ -92,6 +98,20 @@ namespace EVENeT
             icon.Location = EventMap.Center;
             icon.NormalizedAnchorPoint = new Point(0.5, 1.0);
             EventMap.MapElements.Add(icon);
+        }
+
+        private async Task ConvertToBitmap()
+        {
+            string[] paths = _Event.imageGallery.Split('$');
+            foreach (string path in paths)
+            {
+                string temp = path.Trim();
+                BitmapImage bitmap = new BitmapImage();
+                StorageFile file = await StorageFile.GetFileFromPathAsync(temp);
+                bitmap = new BitmapImage();
+                await bitmap.SetSourceAsync(await file.OpenAsync(FileAccessMode.Read));
+                fileImages.Add(bitmap);
+            }
         }
 
         private void Organizer_Hyperlink_Click(Hyperlink sender, HyperlinkClickEventArgs args)

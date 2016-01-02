@@ -49,7 +49,7 @@ namespace EVENeTWcfService
         void CreateOrganization(string username, string password, string name, string logo, string cover, string description, string type, string phone, string website);
 
         [OperationContract]
-        bool CreateEvent(DateTime beginTime, DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser);
+        bool CreateEvent(DateTime beginTime, DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser, string gallery);
 
         [OperationContract]
         void CreateLocation(string name, string description, string address, double longitude, double latitude, string thumbnail);

@@ -79,9 +79,21 @@
                 <StackPanel Margin="0,0,0,32">
                     <TextBlock Text="Gallery" FontSize="24" Margin="0,16" FontWeight="Light"/>
                     <TextBlock Text="Choose album for your gallery (maximum 25 pictures)"/>
-                    <FlipView MaxHeight="300" MaxWidth="500" HorizontalAlignment="Left">
-                    </FlipView>
-                    <Button Content="Browse"/>
+                    <FlipView Name="FlipviewEvent" MaxHeight="300" MaxWidth="500" HorizontalAlignment="Left"
+                             ItemsSource="{Binding fileImages}"
+                              >
+                        <FlipView.ItemTemplate>
+                            <DataTemplate >
+                                <Grid>
+                                    <Image Source="{Binding}" Stretch="UniformToFill" VerticalAlignment="Top"/>
+                                    <!--<Border Background="#A5FFFFFF" Height="60" VerticalAlignment="Bottom">
+                                        <TextBlock Text="{x:Bind Title}" Foreground="#CCFFFFFF" Padding="12,12" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    </Border>-->
+                                </Grid>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView> 
+                    <Button Content="Browse" Click="BrowseImageGallery_Click"/>
                 </StackPanel>
 
                 <!--<RichEditBox x:Name="tmp" Height="300" BorderBrush="{x:Null}" Background="{x:Null}" SelectionHighlightColor="#FF0078D7" IsEnabled="False">

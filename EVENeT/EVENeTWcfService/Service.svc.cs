@@ -86,11 +86,11 @@ namespace EVENeTWcfService
             Data.setOrganization(username, name, description, type, phone, website);
         }
 
-        public bool CreateEvent(DateTime beginTime, DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser)
+        public bool CreateEvent(DateTime beginTime, DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser,string gallery)
         {
             try
             {
-                Data.createEvent(beginTime, endTime, description, thumbnail, title, ticket, locationId, currentUser);
+                Data.createEvent(beginTime, endTime, description, thumbnail, title, ticket, locationId, currentUser,gallery);
                 return true;
             }
             catch (Exception e)

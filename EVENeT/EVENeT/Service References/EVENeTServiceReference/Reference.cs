@@ -28,6 +28,8 @@ namespace EVENeT.EVENeTServiceReference {
         
         private int idField;
         
+        private string imageGalleryField;
+        
         private int locationField;
         
         private System.Nullable<System.DateTime> publishDateField;
@@ -88,6 +90,19 @@ namespace EVENeT.EVENeTServiceReference {
                 if ((this.idField.Equals(value) != true)) {
                     this.idField = value;
                     this.RaisePropertyChanged("id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string imageGallery {
+            get {
+                return this.imageGalleryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.imageGalleryField, value) != true)) {
+                    this.imageGalleryField = value;
+                    this.RaisePropertyChanged("imageGallery");
                 }
             }
         }
@@ -193,6 +208,8 @@ namespace EVENeT.EVENeTServiceReference {
         
         private int idField;
         
+        private string imageGalleryField;
+        
         private int locationField;
         
         private System.Nullable<System.DateTime> publishDateField;
@@ -253,6 +270,19 @@ namespace EVENeT.EVENeTServiceReference {
                 if ((this.idField.Equals(value) != true)) {
                     this.idField = value;
                     this.RaisePropertyChanged("id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string imageGallery {
+            get {
+                return this.imageGalleryField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.imageGalleryField, value) != true)) {
+                    this.imageGalleryField = value;
+                    this.RaisePropertyChanged("imageGallery");
                 }
             }
         }
@@ -881,7 +911,7 @@ namespace EVENeT.EVENeTServiceReference {
         System.Threading.Tasks.Task CreateOrganizationAsync(string username, string password, string name, string logo, string cover, string description, string type, string phone, string website);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateEvent", ReplyAction="http://tempuri.org/IService/CreateEventResponse")]
-        System.Threading.Tasks.Task<bool> CreateEventAsync(System.DateTime beginTime, System.DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser);
+        System.Threading.Tasks.Task<bool> CreateEventAsync(System.DateTime beginTime, System.DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser, string gallery);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/CreateLocation", ReplyAction="http://tempuri.org/IService/CreateLocationResponse")]
         System.Threading.Tasks.Task CreateLocationAsync(string name, string description, string address, double longitude, double latitude, string thumbnail);
@@ -1234,8 +1264,8 @@ namespace EVENeT.EVENeTServiceReference {
             return base.Channel.CreateOrganizationAsync(username, password, name, logo, cover, description, type, phone, website);
         }
         
-        public System.Threading.Tasks.Task<bool> CreateEventAsync(System.DateTime beginTime, System.DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser) {
-            return base.Channel.CreateEventAsync(beginTime, endTime, description, thumbnail, title, ticket, locationId, currentUser);
+        public System.Threading.Tasks.Task<bool> CreateEventAsync(System.DateTime beginTime, System.DateTime endTime, string description, string thumbnail, string title, int ticket, int locationId, string currentUser, string gallery) {
+            return base.Channel.CreateEventAsync(beginTime, endTime, description, thumbnail, title, ticket, locationId, currentUser, gallery);
         }
         
         public System.Threading.Tasks.Task CreateLocationAsync(string name, string description, string address, double longitude, double latitude, string thumbnail) {

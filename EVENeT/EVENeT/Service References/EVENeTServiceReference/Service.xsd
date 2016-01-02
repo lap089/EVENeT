@@ -12,6 +12,7 @@
       <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="imageGallery" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="location" type="xs:int" />
       <xs:element minOccurs="0" name="publishDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="thumbnail" nillable="true" type="xs:string" />
@@ -27,6 +28,7 @@
       <xs:element minOccurs="0" name="description" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="endTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="imageGallery" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="location" type="xs:int" />
       <xs:element minOccurs="0" name="publishDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="thumbnail" nillable="true" type="xs:string" />

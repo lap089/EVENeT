@@ -35,11 +35,11 @@
       <Column Name="ticket" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="location" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Association Name="Event_Comment" Member="Comments" ThisKey="id" OtherKey="eventId" Type="Comment" />
       <Association Name="Event_EventTag" Member="EventTags" ThisKey="id" OtherKey="event" Type="EventTag" />
       <Association Name="Event_Notification" Member="Notifications" ThisKey="id" OtherKey="eventId" Type="Notification" />
-      <Association Name="Event_Photo" Member="Photos" ThisKey="id" OtherKey="eventId" Type="Photo" />
       <Association Name="Event_UserEventAttendant" Member="UserEventAttendants" ThisKey="id" OtherKey="event" Type="UserEventAttendant" />
       <Association Name="Location_Event" Member="Location1" ThisKey="location" OtherKey="id" Type="Location" IsForeignKey="true" />
       <Association Name="User_Event" Member="User" ThisKey="username" OtherKey="username" Type="User" IsForeignKey="true" />
@@ -86,7 +86,7 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
-      <Column Name="address" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="address" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="latitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="longitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
@@ -117,14 +117,6 @@
       <Column Name="website" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
       <Association Name="Type_Organization" Member="Type1" ThisKey="type" OtherKey="name" Type="Type" IsForeignKey="true" />
       <Association Name="User_Organization" Member="User" ThisKey="username" OtherKey="username" Type="User" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.Photo" Member="Photos">
-    <Type Name="Photo">
-      <Column Name="eventId" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="[order]" Member="order" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="data" Type="System.String" DbType="VarChar(256) NOT NULL" CanBeNull="false" />
-      <Association Name="Event_Photo" Member="Event" ThisKey="eventId" OtherKey="id" Type="Event" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Tag" Member="Tags">
@@ -204,6 +196,7 @@
     <Parameter Name="ticket" Type="System.Int32" DbType="Int" />
     <Parameter Name="location" Type="System.Int32" DbType="Int" />
     <Parameter Name="currentUser" Type="System.String" DbType="VarChar(32)" />
+    <Parameter Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" />
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.createIndividual" Method="createIndividual">
@@ -227,7 +220,7 @@
   <Function Name="dbo.createLocation" Method="createLocation">
     <Parameter Name="name" Type="System.String" DbType="NVarChar(32)" />
     <Parameter Name="description" Type="System.String" DbType="NVarChar(1024)" />
-    <Parameter Name="address" Type="System.String" DbType="NVarChar(64)" />
+    <Parameter Name="address" Type="System.String" DbType="NVarChar(256)" />
     <Parameter Name="latitude" Type="System.Double" DbType="Float" />
     <Parameter Name="longitude" Type="System.Double" DbType="Float" />
     <Parameter Name="thumbnail" Type="System.String" DbType="VarChar(256)" />
@@ -306,6 +299,24 @@
     <Parameter Name="friend" Type="System.String" DbType="VarChar(32)" />
     <Return Type="System.Int32" />
   </Function>
+  <Function Name="dbo.followerList" Method="followerList">
+    <Parameter Name="this" Type="System.String" DbType="VarChar(32)" />
+    <ElementType Name="followerListResult">
+      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.followingList" Method="followingList">
+    <Parameter Name="this" Type="System.String" DbType="VarChar(32)" />
+    <ElementType Name="followingListResult">
+      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
   <Function Name="dbo.getAllEvent" Method="getAllEvent">
     <ElementType Name="getAllEventResult">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
@@ -317,6 +328,7 @@
       <Column Name="ticket" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="location" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </ElementType>
   </Function>
@@ -326,6 +338,30 @@
       <Column Name="content" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
       <Column Name="eventId" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="author" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getEventFromID" Method="getEventFromID">
+    <Parameter Name="eventid" Type="System.Int32" DbType="Int" />
+    <ElementType Name="getEventFromIDResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="beginTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="endTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
+      <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ticket" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="location" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getEventFromName" Method="getEventFromName">
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(128)" />
+    <ElementType Name="getEventFromNameResult">
+      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.getIndividual" Method="getIndividual">
@@ -353,10 +389,21 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(1024)" CanBeNull="true" />
-      <Column Name="address" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="address" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Column Name="latitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="longitude" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
       <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getOrganization" Method="getOrganization">
+    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
+    <ElementType Name="getOrganizationResult">
+      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="type" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="phone" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
+      <Column Name="website" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
     </ElementType>
   </Function>
   <Function Name="dbo.getUser" Method="getUser">
@@ -368,6 +415,14 @@
       <Column Name="coverPicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
       <Column Name="registerDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.getUserFromName" Method="getUserFromName">
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(64)" />
+    <ElementType Name="getUserFromNameResult">
+      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
     </ElementType>
   </Function>
   <Function Name="dbo.increaseTagOccurence" Method="increaseTagOccurence">
@@ -392,6 +447,7 @@
       <Column Name="ticket" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="location" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
+      <Column Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
       <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </ElementType>
   </Function>
@@ -409,6 +465,11 @@
       <Column Name="registerDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </ElementType>
+  </Function>
+  <Function Name="dbo.registerEventTicket" Method="registerEventTicket">
+    <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
+    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
+    <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.respondInvitation" Method="respondInvitation">
     <Parameter Name="user" Type="System.String" DbType="VarChar(32)" />
@@ -458,16 +519,35 @@
     <Parameter Name="title" Type="System.String" DbType="NVarChar(128)" />
     <Parameter Name="ticket" Type="System.Int32" DbType="Int" />
     <Parameter Name="location" Type="System.Int32" DbType="Int" />
+    <Parameter Name="imageGallery" Type="System.String" DbType="VarChar(MAX)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.setIndividual" Method="setIndividual">
+    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
+    <Parameter Name="firstName" Type="System.String" DbType="NVarChar(16)" />
+    <Parameter Name="midName" Type="System.String" DbType="NVarChar(16)" />
+    <Parameter Name="lastName" Type="System.String" DbType="NVarChar(16)" />
+    <Parameter Name="dob" Type="System.DateTime" DbType="Date" />
+    <Parameter Name="gender" Type="System.Boolean" DbType="Bit" />
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.setLocation" Method="setLocation">
     <Parameter Name="id" Type="System.Int32" DbType="Int" />
     <Parameter Name="name" Type="System.String" DbType="NVarChar(32)" />
     <Parameter Name="description" Type="System.String" DbType="NVarChar(1024)" />
-    <Parameter Name="address" Type="System.String" DbType="NVarChar(64)" />
+    <Parameter Name="address" Type="System.String" DbType="NVarChar(256)" />
     <Parameter Name="latitude" Type="System.Double" DbType="Float" />
     <Parameter Name="longitude" Type="System.Double" DbType="Float" />
     <Parameter Name="thumbnail" Type="System.String" DbType="VarChar(256)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.setOrganization" Method="setOrganization">
+    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
+    <Parameter Name="name" Type="System.String" DbType="NVarChar(64)" />
+    <Parameter Name="description" Type="System.String" DbType="NVarChar(1024)" />
+    <Parameter Name="type" Type="System.String" DbType="NVarChar(32)" />
+    <Parameter Name="phone" Type="System.String" DbType="VarChar(16)" />
+    <Parameter Name="website" Type="System.String" DbType="VarChar(256)" />
     <Return Type="System.Int32" />
   </Function>
   <Function Name="dbo.setPassword" Method="setPassword">
@@ -486,15 +566,11 @@
     <Parameter Name="password" Type="System.String" DbType="VarChar(64)" />
     <Return Type="System.Boolean" />
   </Function>
-  <Function Name="dbo.isUserExisted" Method="isUserExisted" IsComposable="true">
-    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
-    <Return Type="System.Boolean" />
-  </Function>
   <Function Name="dbo.getLocationFromAddress" Method="getLocationFromAddress" IsComposable="true">
-    <Parameter Name="address" Type="System.String" DbType="NVarChar(64)" />
+    <Parameter Name="address" Type="System.String" DbType="NVarChar(256)" />
     <Return Type="System.Int32" />
   </Function>
-  <Function Name="dbo.getNumberOfTicket" Method="getNumberOfTicket" IsComposable="true">
+  <Function Name="dbo.getNumOfTicket" Method="getNumOfTicket" IsComposable="true">
     <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
     <Return Type="System.Int32" />
   </Function>
@@ -529,6 +605,15 @@
     <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
     <Return Type="System.Boolean" />
   </Function>
+  <Function Name="dbo.isOrganizationFullySetUp" Method="isOrganizationFullySetUp" IsComposable="true">
+    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
+    <Return Type="System.Boolean" />
+  </Function>
+  <Function Name="dbo.isRegistered" Method="isRegistered" IsComposable="true">
+    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
+    <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Boolean" />
+  </Function>
   <Function Name="dbo.isTagExisted" Method="isTagExisted" IsComposable="true">
     <Parameter Name="tagName" Type="System.String" DbType="VarChar(32)" />
     <Return Type="System.Boolean" />
@@ -537,100 +622,8 @@
     <Parameter Name="name" Type="System.String" DbType="VarChar(32)" />
     <Return Type="System.Boolean" />
   </Function>
-  <Function Name="dbo.getEventFromID" Method="getEventFromID">
-    <Parameter Name="eventid" Type="System.Int32" DbType="Int" />
-    <ElementType Name="getEventFromIDResult">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="beginTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="endTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="description" Type="System.String" DbType="NVarChar(1024) NOT NULL" CanBeNull="false" />
-      <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="ticket" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="location" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="publishDate" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.followerList" Method="followerList">
-    <Parameter Name="this" Type="System.String" DbType="VarChar(32)" />
-    <ElementType Name="followerListResult">
-      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
-      <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.followingList" Method="followingList">
-    <Parameter Name="this" Type="System.String" DbType="VarChar(32)" />
-    <ElementType Name="followingListResult">
-      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
-      <Column Name="userType" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.getOrganization" Method="getOrganization">
-    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
-    <ElementType Name="getOrganizationResult">
-      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
-      <Column Name="description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="type" Type="System.String" DbType="NVarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="phone" Type="System.String" DbType="VarChar(16)" CanBeNull="true" />
-      <Column Name="website" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.isOrganizationFullySetUp" Method="isOrganizationFullySetUp" IsComposable="true">
+  <Function Name="dbo.isUserExisted" Method="isUserExisted" IsComposable="true">
     <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
-    <Return Type="System.Boolean" />
-  </Function>
-  <Function Name="dbo.setIndividual" Method="setIndividual">
-    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
-    <Parameter Name="firstName" Type="System.String" DbType="NVarChar(16)" />
-    <Parameter Name="midName" Type="System.String" DbType="NVarChar(16)" />
-    <Parameter Name="lastName" Type="System.String" DbType="NVarChar(16)" />
-    <Parameter Name="dob" Type="System.DateTime" DbType="Date" />
-    <Parameter Name="gender" Type="System.Boolean" DbType="Bit" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.setOrganization" Method="setOrganization">
-    <Parameter Name="id" Type="System.String" DbType="VarChar(32)" />
-    <Parameter Name="name" Type="System.String" DbType="NVarChar(64)" />
-    <Parameter Name="description" Type="System.String" DbType="NVarChar(1024)" />
-    <Parameter Name="type" Type="System.String" DbType="NVarChar(32)" />
-    <Parameter Name="phone" Type="System.String" DbType="VarChar(16)" />
-    <Parameter Name="website" Type="System.String" DbType="VarChar(256)" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.getEventFromName" Method="getEventFromName">
-    <Parameter Name="name" Type="System.String" DbType="NVarChar(128)" />
-    <ElementType Name="getEventFromNameResult">
-      <Column Name="id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="title" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="thumbnail" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.getUserFromName" Method="getUserFromName">
-    <Parameter Name="name" Type="System.String" DbType="NVarChar(64)" />
-    <ElementType Name="getUserFromNameResult">
-      <Column Name="username" Type="System.String" DbType="VarChar(32) NOT NULL" CanBeNull="false" />
-      <Column Name="profilePicture" Type="System.String" DbType="VarChar(256)" CanBeNull="true" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
-    </ElementType>
-  </Function>
-  <Function Name="dbo.registerEventTicket" Method="registerEventTicket">
-    <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
-    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.getNumOfTicket" Method="getNumOfTicket" IsComposable="true">
-    <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
-    <Return Type="System.Int32" />
-  </Function>
-  <Function Name="dbo.isRegistered" Method="isRegistered" IsComposable="true">
-    <Parameter Name="username" Type="System.String" DbType="VarChar(32)" />
-    <Parameter Name="eventId" Type="System.Int32" DbType="Int" />
     <Return Type="System.Boolean" />
   </Function>
 </Database>

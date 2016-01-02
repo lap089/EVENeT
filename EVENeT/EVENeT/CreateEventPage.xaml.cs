@@ -1,5 +1,7 @@
-﻿using System;
+﻿using EVENeT.DataModel;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -7,6 +9,8 @@ using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Services.Maps;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -17,6 +21,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -31,7 +36,9 @@ namespace EVENeT
         List<ITextRange> m_highlightedWords = null;
         MapLocation location;
         bool infoFilled = false;
-
+         ObservableCollection<BitmapImage> fileImages = new ObservableCollection<BitmapImage>();
+        
+        string filePathCombine = "";
         public CreateEventPage()
         {
             this.InitializeComponent();
@@ -39,6 +46,7 @@ namespace EVENeT
             LocationMap.Loaded += LocationMap_Loaded;
             LocationMap.MapTapped += LocationMap_MapTapped;
             TicketNumberTbx.TextChanging += TicketNumberTbx_TextChanging;
+           
         }
 
         private void TicketNumberTbx_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
@@ -135,7 +143,7 @@ namespace EVENeT
                     await DatabaseHelper.Client.CreateLocationAsync("", "", location.Address.FormattedAddress, location.Point.Position.Latitude, location.Point.Position.Longitude, "");
                     locationId = await DatabaseHelper.Client.GetLocationFromAddressAsync(location.Address.FormattedAddress);
                 }
-                if (await DatabaseHelper.Client.CreateEventAsync(beginDate, endDate, description, "", EventTitle.Text, int.Parse(TicketNumberTbx.Text), locationId, DatabaseHelper.CurrentUser))
+                if (await DatabaseHelper.Client.CreateEventAsync(beginDate, endDate, description, "", EventTitle.Text, int.Parse(TicketNumberTbx.Text), locationId, DatabaseHelper.CurrentUser, filePathCombine))
                 {
                     MessageDialog dialog = new MessageDialog("Event created successfully!");
                     await dialog.ShowAsync();
@@ -179,6 +187,32 @@ namespace EVENeT
                 LocationMap.MapElements.Add(icon);
                 LocationMap.Center = result.Locations[0].Point;
             }
+        }
+
+
+        private async void BrowseImageGallery_Click(object sender, RoutedEventArgs e)
+        {
+            fileImages.Clear();
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            openPicker.FileTypeFilter.Add(".png");
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".bmp");
+            
+            IReadOnlyList <StorageFile> files = await openPicker.PickMultipleFilesAsync();
+          
+                foreach (StorageFile file in files)
+                {
+                 filePathCombine += file.Path + " $ ";
+
+                    BitmapImage image = new BitmapImage();
+                    await image.SetSourceAsync(await file.OpenAsync(FileAccessMode.Read));
+                    fileImages.Add(image);
+                }
+          //  ImageBitmapViewModel = new Event(0, "", "", filePathCombine);
+
+            filePathCombine = filePathCombine.Substring(0, filePathCombine.Length - 3);
+            FlipviewEvent.ItemsSource = fileImages;          
         }
     }
 }

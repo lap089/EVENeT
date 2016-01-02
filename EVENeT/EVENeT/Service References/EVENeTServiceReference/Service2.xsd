@@ -200,6 +200,7 @@
         <xs:element minOccurs="0" name="ticket" type="xs:int" />
         <xs:element minOccurs="0" name="locationId" type="xs:int" />
         <xs:element minOccurs="0" name="currentUser" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="gallery" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

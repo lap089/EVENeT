@@ -23,15 +23,14 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Grid x:Name="imgGrid" Background="{ThemeResource NavigationPaneThemeBrush}"
+            <Grid x:Name="imgGrid"  Background="{ThemeResource NavigationPaneThemeBrush}"
                   Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="1">
-                <Image x:Name="EventThumbnail" Stretch="UniformToFill" VerticalAlignment="Center"/>
-                <!--<Grid Background="#99000000"/>-->
+             
             </Grid>
 
             <Pivot x:Name="PagePivot" Grid.Column="1" Grid.Row="1" Margin="0,16,0,16">
                 <PivotItem Header="Detail">
-                   
+
                     <ScrollViewer  VerticalScrollBarVisibility="Hidden">
                         <StackPanel x:Name="MainContent" Grid.Row="1" Grid.Column="1">
 
@@ -99,11 +98,22 @@
 
                         </StackPanel>
                     </ScrollViewer>
-               
                 </PivotItem>
 
                 <PivotItem Header="Review">
-
+                    <FlipView Name="FlipviewEvent" 
+                             ItemsSource="{Binding fileImages}"  >
+                        <FlipView.ItemTemplate>
+                            <DataTemplate >
+                                <Grid>
+                                    <Image Source="{Binding}" MaxHeight="500"  Stretch="Fill" VerticalAlignment="Top"/>
+                                    <!--<Border Background="#A5FFFFFF" Height="60" VerticalAlignment="Bottom">
+                                        <TextBlock Text="{x:Bind Title}" Foreground="#CCFFFFFF" Padding="12,12" Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center"/>
+                                    </Border>-->
+                                </Grid>
+                            </DataTemplate>
+                        </FlipView.ItemTemplate>
+                    </FlipView>
                 </PivotItem>
             </Pivot>
 

@@ -22,7 +22,7 @@ namespace EVENeT.DataModel
             IEnumerable<getEventFromNameResult> list = await DatabaseHelper.Client.GetEventsByNameAsync(name);
             foreach (getEventFromNameResult eventlist in list)
             {
-                Event _event = new Event(eventlist.id, eventlist.title, eventlist.thumbnail);
+                Event _event = new Event(eventlist.id, eventlist.title, eventlist.thumbnail,null);
                 addEvent(_event);
             }
         }
