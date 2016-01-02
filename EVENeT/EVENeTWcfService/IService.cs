@@ -97,7 +97,13 @@ namespace EVENeTWcfService
         IEnumerable<getUserResult> GetUser(string username);
 
         [OperationContract]
-        bool RegisterTicket(string username, string eventId);
+        bool RegisterTicket(string username, int eventId);
+
+        [OperationContract]
+        int GetNumberOfRemainingTicket(int eventId);
+
+        [OperationContract]
+        bool IsRegistered(string username, int eventId);
 
         [OperationContract]
         List<string> GetOrganizationType();

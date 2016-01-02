@@ -933,7 +933,13 @@ namespace EVENeT.EVENeTServiceReference {
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<EVENeT.EVENeTServiceReference.getUserResult>> GetUserAsync(string username);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/RegisterTicket", ReplyAction="http://tempuri.org/IService/RegisterTicketResponse")]
-        System.Threading.Tasks.Task<bool> RegisterTicketAsync(string username, string eventId);
+        System.Threading.Tasks.Task<bool> RegisterTicketAsync(string username, int eventId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/GetNumberOfRemainingTicket", ReplyAction="http://tempuri.org/IService/GetNumberOfRemainingTicketResponse")]
+        System.Threading.Tasks.Task<int> GetNumberOfRemainingTicketAsync(int eventId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/IsRegistered", ReplyAction="http://tempuri.org/IService/IsRegisteredResponse")]
+        System.Threading.Tasks.Task<bool> IsRegisteredAsync(string username, int eventId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IService/GetOrganizationType", ReplyAction="http://tempuri.org/IService/GetOrganizationTypeResponse")]
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<string>> GetOrganizationTypeAsync();
@@ -1292,8 +1298,16 @@ namespace EVENeT.EVENeTServiceReference {
             return base.Channel.GetUserAsync(username);
         }
         
-        public System.Threading.Tasks.Task<bool> RegisterTicketAsync(string username, string eventId) {
+        public System.Threading.Tasks.Task<bool> RegisterTicketAsync(string username, int eventId) {
             return base.Channel.RegisterTicketAsync(username, eventId);
+        }
+        
+        public System.Threading.Tasks.Task<int> GetNumberOfRemainingTicketAsync(int eventId) {
+            return base.Channel.GetNumberOfRemainingTicketAsync(eventId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> IsRegisteredAsync(string username, int eventId) {
+            return base.Channel.IsRegisteredAsync(username, eventId);
         }
         
         public System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<string>> GetOrganizationTypeAsync() {

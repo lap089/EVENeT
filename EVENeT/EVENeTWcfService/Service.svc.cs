@@ -312,9 +312,27 @@ namespace EVENeTWcfService
            return Data.getUser(username);
         }
 
-        public bool RegisterTicket(string username, string eventId)
+        public bool RegisterTicket(string username, int eventId)
         {
+         //   try
+            {
+                Data.registerEventTicket(eventId, username);
+            }
+         //   catch (Exception e)
+            {
+        //        return false;
+            }
             return true;
+        }
+
+        public int GetNumberOfRemainingTicket(int eventId)
+        {
+          return (int) Data.getNumOfTicket(eventId);
+        }
+
+        public bool IsRegistered(string username, int eventId)
+        {
+            return (bool) Data.isRegistered(username, eventId);
         }
 
         public IEnumerable<getUserFromNameResult> GetUsersByName(string name)

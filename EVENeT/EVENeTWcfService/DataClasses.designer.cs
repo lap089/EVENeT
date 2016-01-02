@@ -664,6 +664,25 @@ namespace EVENeTWcfService
 			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), name);
 			return ((ISingleResult<getUserFromNameResult>)(result.ReturnValue));
 		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.registerEventTicket")]
+		public int registerEventTicket([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> eventId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(32)")] string username)
+		{
+			IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), eventId, username);
+			return ((int)(result.ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.getNumOfTicket", IsComposable=true)]
+		public System.Nullable<int> getNumOfTicket([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> eventId)
+		{
+			return ((System.Nullable<int>)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), eventId).ReturnValue));
+		}
+		
+		[global::System.Data.Linq.Mapping.FunctionAttribute(Name="dbo.isRegistered", IsComposable=true)]
+		public System.Nullable<bool> isRegistered([global::System.Data.Linq.Mapping.ParameterAttribute(DbType="VarChar(32)")] string username, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType="Int")] System.Nullable<int> eventId)
+		{
+			return ((System.Nullable<bool>)(this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), username, eventId).ReturnValue));
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Admin")]

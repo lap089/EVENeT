@@ -69,8 +69,9 @@ namespace EVENeT
             EventDescription.Document.SetText(TextSetOptions.FormatRtf, _Event.description);
 
             // Set number of tickets left
-            ticketLeft.Text = _Event.ticket + " left";
-            if (_Event.ticket == 0)
+            ticketLeft.Text = (_Event.ticket - await Client.GetNumberOfRemainingTicketAsync(_Event.id)) + " left";
+            bool isRegistered = await Client.IsRegisteredAsync(DatabaseHelper.CurrentUser, _Event.id);
+            if (_Event.ticket == 0 || DatabaseHelper.CurrentUser == _Event.username || isRegistered)
             {
                 ticketType.Foreground = new SolidColorBrush(Colors.LightGray);
                 ticketLeft.Foreground = new SolidColorBrush(Colors.LightGray);
@@ -115,7 +116,8 @@ namespace EVENeT
 
         private async void ticketRegister_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            bool check = await Client.RegisterTicketAsync("a", "a");
+
+            bool check = await Client.RegisterTicketAsync(DatabaseHelper.CurrentUser, _Event.id);
             if (check)
             {
                 MessageDialog dialog = new MessageDialog("Ticket registered successfully.", "Registered!");
@@ -125,7 +127,7 @@ namespace EVENeT
                 ticketRegister.IsEnabled = false;
 
                 // Update number of tickets left
-                ticketLeft.Text = " left";
+                ticketLeft.Text = ( _Event.ticket - await Client.GetNumberOfRemainingTicketAsync(_Event.id)) +  " left";
             }
             else
             {
